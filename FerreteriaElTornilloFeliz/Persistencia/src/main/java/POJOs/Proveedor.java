@@ -2,51 +2,54 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package DTOSalida;
+package POJOs;
+
+import java.io.Serializable;
+import org.bson.types.ObjectId;
 
 /**
- * DTOSalidaProveedor: Muestra de proveedor.
+ * Representa un proveedor.
  *
  * @author SDavidLedesma
  */
-public class DTOSalidaProveedor {
+public class Proveedor implements Serializable {
 
-    private String idProveedor;
+    private ObjectId id;
     private String nombre;
     private String correo;
     private String telefono;
     private String direccion;
 
     /**
-     * csontructor por omision
+     * constructor por omision
      */
-    public DTOSalidaProveedor() {
+    public Proveedor() {
     }
 
     /**
-     * constructor que inicializa los atributos
+     * constructor que incializa los atributos
      *
-     * @param idProveedor
+     * @param id
      * @param nombre
      * @param correo
      * @param telefono
      * @param direccion
      */
-    public DTOSalidaProveedor(String idProveedor, String nombre, String correo, String telefono, String direccion) {
-        this.idProveedor = idProveedor;
+    public Proveedor(ObjectId id, String nombre, String correo, String telefono, String direccion) {
+        this.id = id;
         this.nombre = nombre;
         this.correo = correo;
         this.telefono = telefono;
         this.direccion = direccion;
     }
 
-    //getters y setters
-    public String getIdProveedor() {
-        return idProveedor;
+    //getetrs y setters
+    public ObjectId getId() {
+        return id;
     }
 
-    public void setIdProveedor(String idProveedor) {
-        this.idProveedor = idProveedor;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -83,7 +86,7 @@ public class DTOSalidaProveedor {
 
     @Override
     public String toString() {
-        return "DTOSalidaProveedor{" + "idProveedor=" + idProveedor + ", nombre=" + nombre + ", correo=" + correo + ", telefono=" + telefono + ", direccion=" + direccion + '}';
+        return "Proveedor{" + "id=" + id + ", nombre=" + nombre + ", correo=" + correo + ", telefono=" + telefono + ", direccion=" + direccion + '}';
     }
 
 }

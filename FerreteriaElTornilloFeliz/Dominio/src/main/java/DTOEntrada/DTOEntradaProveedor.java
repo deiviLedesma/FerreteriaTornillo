@@ -12,6 +12,9 @@ package DTOEntrada;
 public class DTOEntradaProveedor {
 
     private String nombre;
+    private String correo;
+    private String telefono;
+    private String direccion;
 
     /**
      * constructor por omision
@@ -23,9 +26,15 @@ public class DTOEntradaProveedor {
      * constructor que inicializa los atributos
      *
      * @param nombre
+     * @param correo
+     * @param telefono
+     * @param direccion
      */
-    public DTOEntradaProveedor(String nombre) {
+    public DTOEntradaProveedor(String nombre, String correo, String telefono, String direccion) {
         this.nombre = nombre;
+        this.correo = correo;
+        this.telefono = telefono;
+        this.direccion = direccion;
     }
 
     //getters y setters
@@ -37,9 +46,33 @@ public class DTOEntradaProveedor {
         this.nombre = nombre;
     }
 
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
     @Override
     public String toString() {
-        return "DTOEntradaProveedor{" + "nombre=" + nombre + '}';
+        return "DTOEntradaProveedor{" + "nombre=" + nombre + ", correo=" + correo + ", telefono=" + telefono + ", direccion=" + direccion + '}';
     }
 
 }

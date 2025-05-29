@@ -8,6 +8,13 @@
     </parent>
     <artifactId>Persistencia</artifactId>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>4.2.2</version>
+        </dependency>
+    </dependencies>
     <properties>
         <exec.mainClass>ferreteria.persistencia.Persistencia</exec.mainClass>
     </properties>
