@@ -6,6 +6,7 @@ package DAO;
 
 import Excepcion.PersistenciaException;
 import POJOs.Usuario;
+import Utilidades.EncriptadorUtil;
 import java.util.List;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,7 +39,7 @@ public class UsuarioDAOTest {
         Usuario usuario = new Usuario();
         usuario.setNombreUsuario("usuarioPrueba");
         usuario.setNombreCompleto("Usuario Prueba Completo");
-        usuario.setContrasena("1234");
+        usuario.setContrasena(EncriptadorUtil.encriptar("1234"));
         Usuario resultado = usuarioDAO.insertar(usuario);
         assertNotNull(resultado.getId());
         idUsuarioCreado = resultado.getId();

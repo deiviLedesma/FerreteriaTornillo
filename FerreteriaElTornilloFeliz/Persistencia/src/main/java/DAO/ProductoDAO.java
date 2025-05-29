@@ -10,6 +10,7 @@ import Interfaces.IProductoDAO;
 import POJOs.Producto;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
@@ -156,5 +157,52 @@ public class ProductoDAO implements IProductoDAO {
         } catch (Exception e) {
             throw new PersistenciaException("Error al buscar productos con bajo stock: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Descuenta stock del producto indicado.
+     *
+     * @param idProducto ID del producto.
+     * @param cantidad Cantidad a descontar.
+     * @throws PersistenciaException Si ocurre un error o stock insuficiente.
+     */
+    public void descontarStock(String idProducto, int cantidad) throws PersistenciaException {
+        try {
+            Producto producto = buscarPorId(idProducto);
+            if (producto == null) {
+                throw new PersistenciaException("No existe el producto a descontar stock.");
+            }
+            if (producto.getExistencias() < cantidad) {
+                throw new PersistenciaException("Stock insuficiente para descontar.");
+            }
+            producto.setExistencias(producto.getExistencias() - cantidad);
+            actualizar(producto);
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al descontar stock: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Aumenta existencias al producto especificado.
+     *
+     * @param idProducto ID del producto (String).
+     * @param cantidad Cantidad a sumar.
+     * @throws PersistenciaException Si no existe el producto.
+     */
+    public void aumentarStock(String idProducto, int cantidad) throws PersistenciaException {
+        try {
+            Producto producto = buscarPorId(idProducto);
+            if (producto == null) {
+                throw new PersistenciaException("No existe el producto a aumentar stock.");
+            }
+            // Actualiza el campo de existencias en MongoDB (sumando la cantidad)
+            coleccion.updateOne(
+                    Filters.eq("_id", new ObjectId(idProducto)),
+                    Updates.inc("existencias", cantidad)
+            );
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al aumentar stock: " + e.getMessage(), e);
+        }
+
     }
 }

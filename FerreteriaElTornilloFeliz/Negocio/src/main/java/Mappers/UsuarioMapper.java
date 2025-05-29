@@ -19,6 +19,8 @@ public class UsuarioMapper {
 
     /**
      * Convierte de DTOEntradaUsuario a Usuario (POJO).
+     * @param dto
+     * @return 
      */
     public static Usuario toEntityFromEntrada(DTOEntradaUsuario dto) {
         Usuario usuario = new Usuario();
@@ -30,6 +32,8 @@ public class UsuarioMapper {
 
     /**
      * Convierte de Usuario (POJO) a DTOSalidaUsuario.
+     * @param usuario
+     * @return 
      */
     public static DTOSalidaUsuario toDTOSalida(Usuario usuario) {
         DTOSalidaUsuario dto = new DTOSalidaUsuario();
@@ -42,6 +46,8 @@ public class UsuarioMapper {
 
     /**
      * Convierte de DTOSalidaUsuario a Usuario (POJO).
+     * @param dto
+     * @return 
      */
     public static Usuario toEntityFromSalida(DTOSalidaUsuario dto) {
         Usuario usuario = new Usuario();
