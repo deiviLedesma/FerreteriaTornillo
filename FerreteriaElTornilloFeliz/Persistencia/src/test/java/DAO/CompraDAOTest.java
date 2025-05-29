@@ -37,7 +37,7 @@ public class CompraDAOTest {
     @Order(1)
     void testInsertarCompra() throws PersistenciaException {
         Compra compra = new Compra();
-        compra.setIdProveedor(new ObjectId()); // Usa un proveedor real si es integración
+        compra.setIdProveedor(new ObjectId()); 
         compra.setFechaHora(new Date());
         compra.setTotal(450.0);
         Compra resultado = compraDAO.insertar(compra);
@@ -88,7 +88,7 @@ public class CompraDAOTest {
     void testReporteComprasPorFechasYProveedor() throws PersistenciaException {
         // Inserta una compra de prueba
         Compra compra = new Compra();
-        compra.setIdProveedor(new ObjectId()); // Usa proveedor real si tienes integración
+        compra.setIdProveedor(new ObjectId()); 
         compra.setFechaHora(new Date());
         compra.setTotal(123.45);
         Compra resultado = compraDAO.insertar(compra);
@@ -99,7 +99,6 @@ public class CompraDAOTest {
         List<Compra> reporte = compraDAO.reporteComprasPorFechasYProveedor(inicio, fin, resultado.getIdProveedor());
         assertFalse(reporte.isEmpty());
 
-        // Limpieza (opcional)
         compraDAO.eliminar(resultado.getId());
     }
 

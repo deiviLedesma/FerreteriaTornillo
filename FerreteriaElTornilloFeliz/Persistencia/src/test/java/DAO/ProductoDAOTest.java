@@ -41,7 +41,6 @@ public class ProductoDAOTest {
         producto.setPrecioCompra(40.0);
         producto.setPrecioVenta(65.0);
         producto.setExistencias(100);
-        // Completa los demás campos según tu POJO
 
         Producto resultado = productoDAO.insertar(producto);
 

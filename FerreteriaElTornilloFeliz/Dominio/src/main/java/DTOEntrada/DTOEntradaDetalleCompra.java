@@ -11,7 +11,7 @@ package DTOEntrada;
  */
 public class DTOEntradaDetalleCompra {
 
-    private String idProdicto;
+    private String idProducto;
     private int cantidad;
     private double precioUnitario;
 
@@ -24,23 +24,23 @@ public class DTOEntradaDetalleCompra {
     /**
      * constructor que inicializa los atributos
      *
-     * @param idProdicto
+     * @param idProducto
      * @param cantidad
      * @param precioUnitario
      */
-    public DTOEntradaDetalleCompra(String idProdicto, int cantidad, double precioUnitario) {
-        this.idProdicto = idProdicto;
+    public DTOEntradaDetalleCompra(String idProducto, int cantidad, double precioUnitario) {
+        this.idProducto = idProducto;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
     }
 
     //getters y setters
-    public String getIdProdicto() {
-        return idProdicto;
+    public String getIdProducto() {
+        return idProducto;
     }
 
-    public void setIdProdicto(String idProdicto) {
-        this.idProdicto = idProdicto;
+    public void setIdProducto(String idProducto) {
+        this.idProducto = idProducto;
     }
 
     public int getCantidad() {
@@ -61,7 +61,7 @@ public class DTOEntradaDetalleCompra {
 
     @Override
     public String toString() {
-        return "DTOEntradaDetalleCompra{" + "idProdicto=" + idProdicto + ", cantidad=" + cantidad + ", precioUnitario=" + precioUnitario + '}';
+        return "DTOEntradaDetalleCompra{" + "idProducto=" + idProducto + ", cantidad=" + cantidad + ", precioUnitario=" + precioUnitario + '}';
     }
 
 }

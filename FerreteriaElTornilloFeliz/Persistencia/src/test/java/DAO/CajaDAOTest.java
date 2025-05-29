@@ -92,7 +92,7 @@ public class CajaDAOTest {
         List<Caja> cajas = cajaDAO.buscarPorRangoFechas(inicio, fin);
         assertTrue(cajas.size() > 0);
 
-        // Usar el objeto exacto que insertaste
+        // Usa el objeto exacto que se inserto
         resultado.setFechaHoraCierre(new Date());
         resultado.setMontoFinal(550.0);
         Caja cerrada = cajaDAO.cerrarCaja(resultado);

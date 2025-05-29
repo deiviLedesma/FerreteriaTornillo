@@ -24,7 +24,6 @@ public class Producto implements Serializable {
     private int existencias;
     private byte[] imagen; // Opcional
     private boolean bajoStock; // Para alertas
-    private String fechaAlta; // Opcional, formato ISO8601
     private String fechaModificacion;
 
     /**
@@ -47,10 +46,9 @@ public class Producto implements Serializable {
      * @param existencias
      * @param imagen
      * @param bajoStock
-     * @param fechaAlta
      * @param fechaModificacion
      */
-    public Producto(ObjectId id, String nombre, String descripcion, ObjectId idCategoria, ObjectId idUnidadMedida, double precioCompra, double precioVenta, int existencias, byte[] imagen, boolean bajoStock, String fechaAlta, String fechaModificacion) {
+    public Producto(ObjectId id, String nombre, String descripcion, ObjectId idCategoria, ObjectId idUnidadMedida, double precioCompra, double precioVenta, int existencias, byte[] imagen, boolean bajoStock, String fechaModificacion) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -61,7 +59,6 @@ public class Producto implements Serializable {
         this.existencias = existencias;
         this.imagen = imagen;
         this.bajoStock = bajoStock;
-        this.fechaAlta = fechaAlta;
         this.fechaModificacion = fechaModificacion;
     }
 
@@ -90,6 +87,7 @@ public class Producto implements Serializable {
         this.descripcion = descripcion;
     }
 
+    
     public ObjectId getIdCategoria() {
         return idCategoria;
     }
@@ -146,14 +144,6 @@ public class Producto implements Serializable {
         this.bajoStock = bajoStock;
     }
 
-    public String getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public void setFechaAlta(String fechaAlta) {
-        this.fechaAlta = fechaAlta;
-    }
-
     public String getFechaModificacion() {
         return fechaModificacion;
     }
@@ -164,7 +154,7 @@ public class Producto implements Serializable {
 
     @Override
     public String toString() {
-        return "Producto{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", idCategoria=" + idCategoria + ", idUnidadMedida=" + idUnidadMedida + ", precioCompra=" + precioCompra + ", precioVenta=" + precioVenta + ", existencias=" + existencias + ", imagen=" + imagen + ", bajoStock=" + bajoStock + ", fechaAlta=" + fechaAlta + ", fechaModificacion=" + fechaModificacion + '}';
+        return "Producto{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", idCategoria=" + idCategoria + ", idUnidadMedida=" + idUnidadMedida + ", precioCompra=" + precioCompra + ", precioVenta=" + precioVenta + ", existencias=" + existencias + ", imagen=" + imagen + ", bajoStock=" + bajoStock + ", fechaModificacion=" + fechaModificacion + '}';
     }
 
 }

@@ -40,7 +40,6 @@ public class VentaDAOTest {
         venta.setFechaHora(new Date());
         venta.setTotal(900.0);
         venta.setUsuario("usuarioPrueba");
-        // Agrega productos a la lista según tu POJO si es necesario
         Venta resultado = ventaDAO.insertar(venta);
         assertNotNull(resultado.getId());
         idVentaCreada = resultado.getId();
@@ -100,7 +99,6 @@ public class VentaDAOTest {
         List<Venta> reporte = ventaDAO.reporteVentasPorFechasYUsuario(inicio, fin, resultado.getUsuario());
         assertFalse(reporte.size() > 0);
 
-        // Limpieza (opcional)
         ventaDAO.eliminar(resultado.getId());
     }
 

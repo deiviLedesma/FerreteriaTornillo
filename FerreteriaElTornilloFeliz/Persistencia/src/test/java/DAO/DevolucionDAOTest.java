@@ -40,7 +40,6 @@ public class DevolucionDAOTest {
         devolucion.setFecha(new Date());
         devolucion.setMotivo("Producto dañado");
         devolucion.setUsuario("usuarioPrueba");
-        // Agrega detalles según tu POJO si es necesario
         Devolucion resultado = devolucionDAO.insertar(devolucion);
         assertNotNull(resultado.getId());
         idDevolucionCreada = resultado.getId();
@@ -104,7 +103,6 @@ public class DevolucionDAOTest {
         List<Devolucion> porUsuario = devolucionDAO.buscarPorUsuario("usuarioPrueba");
         assertFalse(porUsuario.isEmpty());
 
-        // Limpieza (opcional)
         devolucionDAO.eliminar(resultado.getId());
     }
 
