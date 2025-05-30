@@ -12,4 +12,11 @@
         <exec.mainClass>ferreteria.presentacino.Presentacino</exec.mainClass>
     </properties>
     <name>Presentacion</name>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Negocio</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

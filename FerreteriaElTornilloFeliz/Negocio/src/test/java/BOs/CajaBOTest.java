@@ -84,14 +84,20 @@ class CajaBOTest {
     @Test
     @Order(4)
     void testCerrarCaja() throws NegocioException {
-        DTOSalidaCaja caja = cajaBO.buscarCajaActiva();
-        caja.setFechaHoraCierre(new Date());
-        caja.setMontoFinal(caja.getMontoInicial());
-        caja.setIdUsuarioCierre(idUsuario);
-        caja.setUsuarioCierre("Usuario Prueba Caja");
-        caja.setObservaciones("Cierre de test");
-        DTOSalidaCaja cerrada = cajaBO.cerrarCaja(caja);
-        assertNotNull(cerrada.getFechaHoraCierre());
+        // Buscar la caja activa antes de cerrar
+        DTOSalidaCaja cajaActiva = cajaBO.buscarCajaActiva();
+        assertNotNull(cajaActiva, "No hay caja activa para cerrar.");
+        assertNull(cajaActiva.getFechaHoraCierre(), "La caja ya está cerrada.");
+
+        // Realizar el cierre usando el método correcto
+        double montoFinal = cajaActiva.getMontoInicial(); // o algún monto distinto para probar
+        DTOSalidaCaja cerrada = cajaBO.cerrarCaja(cajaActiva.getIdCaja(), montoFinal);
+
+        // Validaciones
+        assertNotNull(cerrada, "Debe regresar el DTO de la caja cerrada.");
+        assertNotNull(cerrada.getFechaHoraCierre(), "La caja debe tener fecha de cierre.");
+        assertEquals(montoFinal, cerrada.getMontoFinal(), "El monto final debe ser el esperado.");
+        assertEquals(cajaActiva.getIdCaja(), cerrada.getIdCaja(), "El ID de la caja debe coincidir.");
     }
 
     @Test

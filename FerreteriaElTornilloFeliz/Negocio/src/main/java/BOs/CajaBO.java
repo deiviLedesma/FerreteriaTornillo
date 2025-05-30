@@ -46,46 +46,25 @@ public class CajaBO {
     }
 
     /**
-     * Cierra la caja indicada. Calcula automáticamente el total de ventas entre
-     * apertura y cierre. Lanza excepción si la caja ya está cerrada.
-     *
-     * @param dto DTO de salida de caja (debe contener id, monto final,
-     * fecha/hora cierre y observaciones)
-     * @return DTOSalidaCaja cerrada
-     * @throws NegocioException
+     * Cierra la caja y devuelve su DTO de salida actualizado.
      */
-    public DTOSalidaCaja cerrarCaja(DTOSalidaCaja dto) throws NegocioException {
+    public DTOSalidaCaja cerrarCaja(String idCaja, double montoFinal) throws NegocioException {
         try {
-            // Buscar la caja actual por ID
-            Caja cajaActual = cajaDAO.buscarPorId(dto.getIdCaja());
-            if (cajaActual == null) {
+            // Busca la caja
+            DTOSalidaCaja dtoCaja = buscarPorId(idCaja);
+            if (dtoCaja == null) {
                 throw new NegocioException("No se encontró la caja a cerrar.");
             }
-            // Validar que no esté ya cerrada
-            if (cajaActual.getFechaHoraCierre() != null) {
-                throw new NegocioException("La caja ya fue cerrada anteriormente.");
+            // Valida que no esté cerrada
+            if (dtoCaja.getFechaHoraCierre() != null) {
+                throw new NegocioException("La caja ya está cerrada.");
             }
-            // Usa el usuario de apertura para calcular ventas de este turno
-            String idUsuarioApertura = cajaActual.getIdUsuarioApertura() != null
-                    ? cajaActual.getIdUsuarioApertura().toHexString() : null;
-
-            Date fechaInicio = cajaActual.getFechaHoraApertura();
-            Date fechaFin = dto.getFechaHoraCierre();
-
-            // Se calcula el total de ventas SOLO de este usuario en ese turno
-            List<Venta> ventas = ventaDAO.reporteVentasPorFechasYUsuario(fechaInicio, fechaFin, idUsuarioApertura);
-            double totalVentas = ventas.stream().mapToDouble(Venta::getTotal).sum();
-
-            cajaActual.setFechaHoraCierre(dto.getFechaHoraCierre());
-            cajaActual.setMontoFinal(dto.getMontoFinal());
-            cajaActual.setObservaciones(dto.getObservaciones());
-            cajaActual.setIdUsuarioCierre(dto.getIdUsuarioCierre() != null
-                    ? new org.bson.types.ObjectId(dto.getIdUsuarioCierre()) : null);
-            cajaActual.setUsuarioCierre(dto.getUsuarioCierre());
-            cajaActual.setTotalVentas(totalVentas);
-
-            Caja cajaCerrada = cajaDAO.cerrarCaja(cajaActual);
-            return CajaMapper.toDTOSalida(cajaCerrada);
+            // Actualiza campos
+            dtoCaja.setFechaHoraCierre(new Date());
+            dtoCaja.setMontoFinal(montoFinal);
+            // Realiza el cierre en la base de datos
+            cajaDAO.cerrarCaja(CajaMapper.toEntityFromSalida(dtoCaja));
+            return buscarPorId(idCaja); // Regresa la caja cerrada y actualizada
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al cerrar caja: " + ex.getMessage(), ex);
         }

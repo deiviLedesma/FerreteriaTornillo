@@ -15,10 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Business Object para la gestión de productos.
- * Realiza validaciones básicas y opera solo con DTOs.
- * Propaga errores como NegocioException.
- * 
+ * Business Object para la gestión de productos. Realiza validaciones básicas y
+ * opera solo con DTOs. Propaga errores como NegocioException.
+ *
  * @author SDavidLedesma
  */
 public class ProductoBO {
@@ -27,7 +26,7 @@ public class ProductoBO {
 
     /**
      * Registra un nuevo producto.
-     * 
+     *
      * @param dto DTOEntradaProducto con datos a registrar
      * @throws NegocioException Si ocurre un error de negocio/persistencia
      */
@@ -42,7 +41,7 @@ public class ProductoBO {
 
     /**
      * Consulta todos los productos existentes.
-     * 
+     *
      * @return Lista de DTOSalidaProducto
      * @throws NegocioException Si ocurre un error en la consulta
      */
@@ -60,7 +59,7 @@ public class ProductoBO {
 
     /**
      * Busca un producto por su ID.
-     * 
+     *
      * @param idProducto ID a buscar
      * @return DTOSalidaProducto si lo encuentra, null si no existe
      * @throws NegocioException Si ocurre un error en la búsqueda
@@ -79,13 +78,28 @@ public class ProductoBO {
 
     /**
      * Actualiza un producto existente.
-     * 
-     * @param dto Datos de salida del producto
+     *
+     * @param idProducto El id del producto a actualizar (String, en formato
+     * hexadecimal de ObjectId)
+     * @param dto Datos de entrada del producto a actualizar
+     * (DTOEntradaProducto)
      * @throws NegocioException Si ocurre un error al actualizar
      */
-    public void actualizarProducto(DTOSalidaProducto dto) throws NegocioException {
+    public void actualizarProducto(String idProducto, DTOEntradaProducto dto) throws NegocioException {
         try {
-            Producto producto = ProductoMapper.toEntityFromSalida(dto);
+            Producto producto = productoDAO.buscarPorId(idProducto);
+            if (producto == null) {
+                throw new NegocioException("No se encontró el producto a actualizar.");
+            }
+            // Solo se actualizan los campos editables
+            producto.setNombre(dto.getNombre());
+            producto.setDescripcion(dto.getDescripcion());
+            producto.setPrecioCompra(dto.getPrecioCompra());
+            producto.setPrecioVenta(dto.getPrecioVenta());
+            producto.setExistencias(dto.getExistencias());
+            producto.setIdCategoria(new org.bson.types.ObjectId(dto.getIdCategoria()));
+            producto.setIdUnidadMedida(new org.bson.types.ObjectId(dto.getIdUnidadMedida()));
+            producto.setImagen(dto.getImagen());
             productoDAO.actualizar(producto);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al actualizar producto: " + ex.getMessage(), ex);
@@ -94,7 +108,7 @@ public class ProductoBO {
 
     /**
      * Elimina un producto por ID.
-     * 
+     *
      * @param idProducto ID a eliminar
      * @throws NegocioException Si ocurre un error al eliminar
      */
