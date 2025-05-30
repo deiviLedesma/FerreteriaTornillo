@@ -1,0 +1,128 @@
+productos 
+{
+  "_id": "6642b1c12345f1a2b3c4d5e6",    // ObjectId generado por Mongo
+  "nombre": "Taladro inalámbrico",
+  "descripcion": "Taladro de 18V con batería de litio",
+  "idCategoria": "663fc1e1123456b7c8d9e0f1",  // Referencia a categoría
+  "idUnidadMedida": "663fc1e1123456b7c8d9e0f2", // Referencia a unidad
+  "precioCompra": 900.0,
+  "precioVenta": 1250.0,
+  "existencias": 25,
+  "imagen": null,   // O base64/binario, si manejas imágenes
+  "fechaAlta": "2024-05-28T13:00:00Z",   // opcional, útil para auditoría
+  "fechaModificacion": "2024-05-29T10:30:00Z",
+  "bajoStock": false
+}
+categorías
+{
+  "_id": "663fc1e1123456b7c8d9e0f1",
+  "nombre": "Herramientas Eléctricas"
+}
+unidades de medida
+{
+  "_id": "663fc1e1123456b7c8d9e0f2",
+  "nombre": "Pieza"
+}
+proveedores
+{
+  "_id": "663fc2a9123456b7c8d9e1f3",
+  "nombre": "Materiales y Suministros S.A. de C.V.",
+  "correo": "ventas@materiales.com.mx",
+  "telefono": "5533445566",
+  "direccion": "Av. Industria #102, Col. Centro, CDMX"
+}
+usuarios
+{
+  "_id": "663fc2b8123456b7c8d9e1f4",
+  "nombreUsuario": "admin",
+  "nombreCompleto": "Juan Pérez",
+  "contrasena": "$2a$10$aCk.1F8...hash-bcrypt...", // SIEMPRE HASH
+  "fechaAlta": "2024-05-10T09:00:00Z"
+}
+compras
+{
+  "_id": "663fc3c4123456b7c8d9e2f5",
+  "fechaHora": "2024-05-27T16:45:00Z",
+  "idProveedor": "663fc2a9123456b7c8d9e1f3",
+  "proveedor": "Materiales y Suministros S.A. de C.V.",
+  "detalles": [
+    {
+      "idProducto": "6642b1c12345f1a2b3c4d5e6",
+      "nombreProducto": "Taladro inalámbrico",
+      "cantidad": 10,
+      "precioUnitario": 900.0,
+      "subtotal": 9000.0
+    },
+    {
+      "idProducto": "6642b1c99876a2b3c4d5e789",
+      "nombreProducto": "Martillo de uña",
+      "cantidad": 20,
+      "precioUnitario": 80.0,
+      "subtotal": 1600.0
+    }
+  ],
+  "total": 10600.0,
+  "idUsuario": "663fc2b8123456b7c8d9e1f4",
+  "usuario": "Juan Pérez"
+}
+ventas
+{
+  "_id": "6642d1b1123456b7c8d9e2f6",
+  "fechaHora": "2024-05-28T11:23:00Z",
+  "detalles": [
+    {
+      "idProducto": "6642b1c12345f1a2b3c4d5e6",
+      "nombreProducto": "Taladro inalámbrico",
+      "cantidad": 2,
+      "precioUnitario": 1250.0,
+      "subtotal": 2500.0
+    },
+    {
+      "idProducto": "6642b1c99876a2b3c4d5e789",
+      "nombreProducto": "Martillo de uña",
+      "cantidad": 5,
+      "precioUnitario": 120.0,
+      "subtotal": 600.0
+    }
+  ],
+  "total": 3100.0,
+  "idUsuario": "663fc2b8123456b7c8d9e1f4",
+  "usuario": "Juan Pérez",
+  "idCaja": "6642c6d9123456b7c8d9e2e3",
+  "caja": "Caja Principal"
+}
+caja 
+{
+  "_id": "6642c6d9123456b7c8d9e2e3",
+  "fechaHoraApertura": "2024-05-28T08:00:00Z",
+  "montoInicial": 5000.0,
+  "fechaHoraCierre": "2024-05-28T18:00:00Z",
+  "montoFinal": 8100.0,
+  "totalVentas": 3100.0,
+  "observaciones": "Todo correcto.",
+  "idUsuarioApertura": "663fc2b8123456b7c8d9e1f4",
+  "usuarioApertura": "Juan Pérez",
+  "idUsuarioCierre": "663fc2b8123456b7c8d9e1f4",
+  "usuarioCierre": "Juan Pérez"
+}
+devoluciones
+{
+  "_id": "6642e7e5123456b7c8d9e4a0",
+  "fecha": "2024-05-28T12:10:00Z",
+  "motivo": "Producto defectuoso",
+  "idUsuario": "663fc2b8123456b7c8d9e1f4",
+  "usuario": "Juan Pérez",
+  "tipo": "PRODUCTO", // O "VENTA"
+  "idVenta": "6642d1b1123456b7c8d9e2f6", // solo si aplica
+  "venta": "Folio 00123", // info básica para mostrar
+  "idProducto": "6642b1c12345f1a2b3c4d5e6", // solo si aplica
+  "producto": "Taladro inalámbrico",
+  "cantidad": 1,
+  "decision": "REINTEGRAR" // o "DESCARTAR"
+}
+
+
+
+
+
+
