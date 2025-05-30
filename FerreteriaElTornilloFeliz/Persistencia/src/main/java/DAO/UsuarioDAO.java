@@ -8,6 +8,7 @@ import Conexion.Conexion;
 import Excepcion.PersistenciaException;
 import Interfaces.IUsuarioDAO;
 import POJOs.Usuario;
+import Utilidades.EncriptadorUtil;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
@@ -103,4 +104,30 @@ public class UsuarioDAO implements IUsuarioDAO {
             throw new PersistenciaException("Error al buscar todos los usuarios: " + e.getMessage(), e);
         }
     }
+
+    /**
+     * Valida las credenciales de un usuario consultando por nombreUsuario y
+     * comparando la contraseña encriptada.
+     *
+     * @param nombreUsuario Nombre de usuario
+     * @param contrasena Contraseña en texto plano
+     * @return Usuario si las credenciales son válidas, null si no
+     * @throws PersistenciaException Si ocurre un error en la consulta
+     */
+    public Usuario validarCredenciales(String nombreUsuario, String contrasena) throws PersistenciaException {
+        try {
+            Usuario usuario = coleccion.find(Filters.eq("nombreUsuario", nombreUsuario)).first();
+            if (usuario == null) {
+                return null;
+            }
+            // Aquí usas tu encriptador para comparar
+            if (EncriptadorUtil.verificar(contrasena, usuario.getContrasena())) {
+                return usuario;
+            }
+            return null;
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al validar credenciales: " + e.getMessage(), e);
+        }
+    }
+
 }

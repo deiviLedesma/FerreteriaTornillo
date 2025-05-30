@@ -73,4 +73,26 @@ public class UsuarioBO {
             throw new NegocioException("Error al eliminar usuario: " + ex.getMessage(), ex);
         }
     }
+
+    /**
+     * Valida las credenciales de un usuario y retorna su DTO si son correctas.
+     *
+     * @param nombreUsuario Nombre de usuario
+     * @param contrasena Contraseña en texto plano
+     * @return DTOSalidaUsuario si las credenciales son válidas
+     * @throws NegocioException Si las credenciales son incorrectas o hay error
+     * de persistencia
+     */
+    public DTOSalidaUsuario validarCredenciales(String nombreUsuario, String contrasena) throws NegocioException {
+        try {
+            Usuario usuario = usuarioDAO.validarCredenciales(nombreUsuario, contrasena);
+            if (usuario == null) {
+                throw new NegocioException("Usuario o contraseña incorrectos.");
+            }
+            return UsuarioMapper.toDTOSalida(usuario);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al validar credenciales: " + ex.getMessage(), ex);
+        }
+    }
+
 }
