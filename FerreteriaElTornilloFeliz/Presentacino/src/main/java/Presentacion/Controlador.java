@@ -35,6 +35,7 @@ import Interfaces.IUnidadMedidaBO;
 import Interfaces.IUsuarioBO;
 import Interfaces.IVentaBO;
 import ManejadorDeObjetos.ManejadorBOs;
+import Utilerias.ControladorSesion;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,6 +61,9 @@ public class Controlador {
     private DTOSalidaDetalleVenta dTOSalidaDetalleVenta;
     private DTOSalidaDetalleCompra compra;
     private List<DTOSalidaProducto> productos = new ArrayList<>();
+    private DTOSalidaUsuario usuarioActual;
+    private DTOSalidaCaja cajaActiva;
+    private double montoInicial = 500.00;
 
     //ventana principal
     private JFrame framePrincipal;
@@ -117,17 +121,19 @@ public class Controlador {
         pantallaRegistrarVenta = new PantallaRegistrarVenta(this);
         pantallaReportes = new PantallaReportes(this);
         pantallarRegistarProducto = new PantallarRegistarProducto(this);
-        
+
     }
-    
+
     public DTOSalidaCaja abrirCaja(DTOEntradaCaja dto) throws NegocioException {
         try {
-            return cajaBO.abrirCaja(dto);
+            dto.setFechaHoraApertura(new Date());
+            dto.setMontoInicial(montoInicial);
+            return this.cajaActiva = cajaBO.abrirCaja(dto);
         } catch (NegocioException e) {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaCaja cerrarCaja(String idCaja, double montoFinal) throws NegocioException {
         try {
             return cajaBO.cerrarCaja(idCaja, montoFinal);
@@ -135,7 +141,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaCaja buscarCajaActiva() throws NegocioException {
         try {
             return cajaBO.buscarCajaActiva();
@@ -143,7 +149,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaCaja> buscarTodasLasCajas() throws NegocioException {
         try {
             return cajaBO.buscarTodos();
@@ -151,7 +157,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaCaja> reporteCajaPorFechas(Date inicio, Date fin) throws NegocioException {
         try {
             return cajaBO.reporteCajasPorRangoFechas(inicio, fin);
@@ -159,7 +165,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaCategoria registrarCategoria(DTOEntradaCategoria dto) throws NegocioException {
         try {
             return categoriaBO.registrarCategoria(dto);
@@ -167,7 +173,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaCategoria actualizarCategoria(DTOSalidaCategoria dto) throws NegocioException {
         try {
             return categoriaBO.actualizarCategoria(dto);
@@ -175,7 +181,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaCategoria> consultarTodasCategorias() throws NegocioException {
         try {
             return categoriaBO.consultarTodas();
@@ -183,7 +189,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaCompra registrarCompra(DTOEntradaCompra dto) throws NegocioException {
         try {
             return compraBO.registrarCompra(dto);
@@ -191,7 +197,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaCompra> buscarTodasCompras() throws NegocioException {
         try {
             return compraBO.buscarTodas();
@@ -199,7 +205,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaCompra buscarCompraPorId(String idCompra) throws NegocioException {
         try {
             return compraBO.buscarPorId(idCompra);
@@ -207,7 +213,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaCompra> reporteComprasPorFechasYProveedor(Date inicio, Date fin, String idProveedor) throws NegocioException {
         try {
             return compraBO.reporteComprasPorRangoYProveedor(inicio, fin, idProveedor);
@@ -215,7 +221,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaDevolucion registrarDevolucion(DTOEntradaDevolucion dto) throws NegocioException {
         try {
             return devolucionBO.registrarDevolucion(dto);
@@ -223,7 +229,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaDevolucion> buscarTodasDevoluciones() throws NegocioException {
         try {
             return devolucionBO.buscarTodas();
@@ -231,7 +237,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaDevolucion buscarDevolucionPorId(String id) throws NegocioException {
         try {
             return devolucionBO.buscarPorId(id);
@@ -239,7 +245,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaDevolucion> reporteDevolucionesPorFechas(Date inicio, Date fin) throws NegocioException {
         try {
             return devolucionBO.reporteDevolucionesPorRangoFechas(inicio, fin);
@@ -247,7 +253,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaDevolucion> reporteDevolucionesPorUsuario(String idUsuario) throws NegocioException {
         try {
             return devolucionBO.reporteDevolucionesPorUsuario(idUsuario);
@@ -255,7 +261,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaProducto registrarProducto(DTOEntradaProducto dto) throws NegocioException {
         try {
             return productoBO.registrarProducto(dto);
@@ -263,7 +269,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaProducto actualizarProducto(String id, DTOEntradaProducto dto) throws NegocioException {
         try {
             return productoBO.actualizarProducto(id, dto);
@@ -271,7 +277,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaProducto> consultarTodosProductos() throws NegocioException {
         try {
             return productoBO.consultarTodos();
@@ -279,7 +285,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaProducto buscarProductoPorId(String id) throws NegocioException {
         try {
             return productoBO.buscarPorId(id);
@@ -287,7 +293,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaProveedor registrarProveedor(DTOEntradaProveedor dto) throws NegocioException {
         try {
             return proveedorBO.registrarProveedor(dto);
@@ -295,7 +301,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaProveedor actualizarProveedor(DTOSalidaProveedor dto) throws NegocioException {
         try {
             return proveedorBO.actualizarProveedor(dto);
@@ -303,7 +309,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaProveedor> consultarTodosProveedores() throws NegocioException {
         try {
             return proveedorBO.consultarTodos();
@@ -311,7 +317,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaUnidadMedida registrarUnidadMedida(DTOEntradaUnidadMedida dto) throws NegocioException {
         try {
             return unidadMedidaBO.registrarUnidadMedida(dto);
@@ -319,7 +325,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaUnidadMedida actualizarUnidadMedida(DTOSalidaUnidadMedida dto) throws NegocioException {
         try {
             return unidadMedidaBO.actualizarUnidadMedida(dto);
@@ -327,7 +333,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaUnidadMedida> consultarTodasUnidades() throws NegocioException {
         try {
             return unidadMedidaBO.consultarTodas();
@@ -335,7 +341,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaUsuario registrarUsuario(DTOEntradaUsuario dto) throws NegocioException {
         try {
             return usuarioBO.registrarUsuario(dto);
@@ -343,7 +349,16 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
+    public boolean iniciarSesion(String nombreUsuario, String contrasena) throws NegocioException {
+        DTOSalidaUsuario usuario = usuarioBO.validarCredenciales(nombreUsuario, contrasena);
+        if (usuario != null) {
+            this.usuarioActual = usuario;
+            return true;
+        }
+        return false;
+    }
+
     public List<DTOSalidaUsuario> consultarTodosUsuarios() throws NegocioException {
         try {
             return usuarioBO.consultarTodos();
@@ -351,7 +366,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaUsuario validarCredenciales(String usuario, String contrasena) throws NegocioException {
         try {
             return usuarioBO.validarCredenciales(usuario, contrasena);
@@ -359,7 +374,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaVenta registrarVenta(DTOEntradaVenta dto) throws NegocioException {
         try {
             return ventaBO.registrarVenta(dto);
@@ -367,7 +382,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaVenta> buscarTodasVentas() throws NegocioException {
         try {
             return ventaBO.buscarTodas();
@@ -375,7 +390,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public DTOSalidaVenta buscarVentaPorId(String idVenta) throws NegocioException {
         try {
             return ventaBO.buscarPorId(idVenta);
@@ -383,7 +398,7 @@ public class Controlador {
             throw new NegocioException(e.getLocalizedMessage());
         }
     }
-    
+
     public List<DTOSalidaVenta> reporteVentasPorRangoFechasYUsuario(Date inicio, Date fin, String idUsuario) throws NegocioException {
         try {
             return ventaBO.buscarPorRangoFechasYUsuario(inicio, fin, idUsuario);
@@ -400,57 +415,57 @@ public class Controlador {
         framePrincipal.repaint();
         framePrincipal.setVisible(true);
     }
-    
+
     public void mostrarMenu() {
         cambiarPantalla(menuPrincipal);
     }
-    
+
     public void mostrarPantallaCaja() {
         cambiarPantalla(pantallaCaja);
     }
-    
+
     public void mostrarPantallaDevoluciones() {
         cambiarPantalla(pantallaDevoluciones);
     }
-    
+
     public void mostrarPantallaIniciarUsuario() {
         cambiarPantalla(pantallaIniciarUsuario);
     }
-    
+
     public void mostrarPantallaProveedores() {
         cambiarPantalla(pantallaProveedores);
     }
-    
+
     public void mostrarPantallaRegistrarCompra() {
         cambiarPantalla(pantallaRegistrarCompra);
     }
-    
+
     public void mostrarPantallaRegistrarVenta() {
         cambiarPantalla(pantallaRegistrarVenta);
     }
-    
+
     public void mostrarPantallaReportes() {
         cambiarPantalla(pantallaReportes);
     }
-    
+
     public void mostrarPantallaRegistrarProducto() {
         cambiarPantalla(pantallarRegistarProducto);
     }
-    
+
     public void reconstruirPantallaCompra() {
         pantallaRegistrarCompra = new PantallaRegistrarCompra(this);
     }
-    
+
     public void reconstruirPantallaVenta() {
         pantallaRegistrarVenta = new PantallaRegistrarVenta(this);
     }
-    
+
     public void reconstruirPantallaProducto() {
         pantallarRegistarProducto = new PantallarRegistarProducto(this);
     }
-    
+
     public void reconstruirPantallaUsuario() {
         pantallaIniciarUsuario = new PantallaIniciarUsuario(this);
     }
-    
+
 }
