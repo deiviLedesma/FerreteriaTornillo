@@ -11,6 +11,8 @@ import Excepcion.NegocioException;
 import Mappers.ProveedorMapper;
 import POJOs.Proveedor;
 import Excepcion.PersistenciaException;
+import Interfaces.IProductoDAO;
+import Interfaces.IProveedorDAO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +24,18 @@ import java.util.List;
  */
 public class ProveedorBO {
 
-    private final ProveedorDAO proveedorDAO = new ProveedorDAO();
+    private final IProveedorDAO proveedorDAO;
 
-    public void registrarProveedor(DTOEntradaProveedor dto) throws NegocioException {
+    public ProveedorBO(IProveedorDAO proveedorDAO) {
+        this.proveedorDAO = proveedorDAO;
+
+    }
+
+    public DTOSalidaProveedor registrarProveedor(DTOEntradaProveedor dto) throws NegocioException {
         try {
             Proveedor proveedor = ProveedorMapper.toEntityFromEntrada(dto);
             proveedorDAO.insertar(proveedor);
+            return ProveedorMapper.toDTOSalida(proveedor);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al registrar proveedor: " + ex.getMessage(), ex);
         }
@@ -57,10 +65,11 @@ public class ProveedorBO {
         }
     }
 
-    public void actualizarProveedor(DTOSalidaProveedor dto) throws NegocioException {
+    public DTOSalidaProveedor actualizarProveedor(DTOSalidaProveedor dto) throws NegocioException {
         try {
             Proveedor proveedor = ProveedorMapper.toEntityFromSalida(dto);
             proveedorDAO.actualizar(proveedor);
+            return ProveedorMapper.toDTOSalida(proveedor);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al actualizar proveedor: " + ex.getMessage(), ex);
         }

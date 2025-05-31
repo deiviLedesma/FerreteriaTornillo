@@ -69,4 +69,7 @@ public interface IUsuarioDAO {
      * @throws PersistenciaException Si ocurre un error durante la consulta.
      */
     List<Usuario> buscarTodos() throws PersistenciaException;
+
+    Usuario validarCredenciales(String nombreUsuario, String contrasena) throws PersistenciaException;
+
 }

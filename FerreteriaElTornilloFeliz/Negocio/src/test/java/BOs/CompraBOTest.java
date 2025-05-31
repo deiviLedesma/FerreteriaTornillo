@@ -4,6 +4,12 @@
  */
 package BOs;
 
+import DAO.CategoriaDAO;
+import DAO.CompraDAO;
+import DAO.ProductoDAO;
+import DAO.ProveedorDAO;
+import DAO.UnidadMedidaDAO;
+import DAO.UsuarioDAO;
 import DTOEntrada.DTOEntradaCategoria;
 import DTOEntrada.DTOEntradaCompra;
 import DTOEntrada.DTOEntradaDetalleCompra;
@@ -13,6 +19,12 @@ import DTOEntrada.DTOEntradaUnidadMedida;
 import DTOEntrada.DTOEntradaUsuario;
 import DTOSalida.DTOSalidaCompra;
 import Excepcion.NegocioException;
+import Interfaces.ICategoriaDAO;
+import Interfaces.ICompraDAO;
+import Interfaces.IProductoDAO;
+import Interfaces.IProveedorDAO;
+import Interfaces.IUnidadMedidaDAO;
+import Interfaces.IUsuarioDAO;
 import Utilidades.EncriptadorUtil;
 import java.util.Date;
 import java.util.List;
@@ -41,10 +53,14 @@ public class CompraBOTest {
 
     @BeforeAll
     static void setUp() throws NegocioException {
-        compraBO = new CompraBO();
-        proveedorBO = new ProveedorBO();
-        productoBO = new ProductoBO();
-        usuarioBO = new UsuarioBO();
+        ICompraDAO compraDAO = new CompraDAO();
+        IProductoDAO productoDAO = new ProductoDAO();
+        compraBO = new CompraBO(compraDAO, productoDAO);
+        IProveedorDAO proveedorDAO = new ProveedorDAO();
+        proveedorBO = new ProveedorBO(proveedorDAO);
+        productoBO = new ProductoBO(productoDAO);
+        IUsuarioDAO usuarioDAO = new UsuarioDAO();
+        usuarioBO = new UsuarioBO(usuarioDAO);
 
         // Crear proveedor de prueba
         DTOEntradaProveedor dtoProveedor = new DTOEntradaProveedor();
@@ -68,8 +84,10 @@ public class CompraBOTest {
                 .findFirst().orElseThrow().getIdUsaurio();
 
         // Crear producto de prueba (requiere categoría y unidad)
-        CategoriaBO categoriaBO = new CategoriaBO();
-        UnidadMedidaBO unidadBO = new UnidadMedidaBO();
+        ICategoriaDAO categoriaDAO = new CategoriaDAO();
+        CategoriaBO categoriaBO = new CategoriaBO(categoriaDAO);
+        IUnidadMedidaDAO unidadMedidaDAO = new UnidadMedidaDAO();
+        UnidadMedidaBO unidadBO = new UnidadMedidaBO(unidadMedidaDAO);
         DTOEntradaCategoria catDto = new DTOEntradaCategoria();
         catDto.setNombre("CatCompraTest");
         categoriaBO.registrarCategoria(catDto);

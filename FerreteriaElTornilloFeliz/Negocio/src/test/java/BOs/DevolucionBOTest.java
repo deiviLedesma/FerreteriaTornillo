@@ -4,6 +4,11 @@
  */
 package BOs;
 
+import DAO.CategoriaDAO;
+import DAO.DevolucionDAO;
+import DAO.ProductoDAO;
+import DAO.UnidadMedidaDAO;
+import DAO.UsuarioDAO;
 import DTOEntrada.DTOEntradaCategoria;
 import DTOEntrada.DTOEntradaDevolucion;
 import DTOEntrada.DTOEntradaProducto;
@@ -11,6 +16,11 @@ import DTOEntrada.DTOEntradaUnidadMedida;
 import DTOEntrada.DTOEntradaUsuario;
 import DTOSalida.DTOSalidaDevolucion;
 import Excepcion.NegocioException;
+import Interfaces.ICategoriaDAO;
+import Interfaces.IDevolucionDAO;
+import Interfaces.IProductoDAO;
+import Interfaces.IUnidadMedidaDAO;
+import Interfaces.IUsuarioDAO;
 import Utilidades.EncriptadorUtil;
 import java.util.Date;
 import java.util.List;
@@ -39,11 +49,16 @@ public class DevolucionBOTest {
 
     @BeforeAll
     static void setUp() throws NegocioException {
-        devolucionBO = new DevolucionBO();
-        productoBO = new ProductoBO();
-        usuarioBO = new UsuarioBO();
-        categoriaBO = new CategoriaBO();
-        unidadMedidaBO = new UnidadMedidaBO();
+        IProductoDAO productoDAO = new ProductoDAO();
+        IDevolucionDAO devolucionDAO = new DevolucionDAO();
+        devolucionBO = new DevolucionBO(devolucionDAO, productoDAO);
+        productoBO = new ProductoBO(productoDAO);
+        IUsuarioDAO usuarioDAO = new UsuarioDAO();
+        usuarioBO = new UsuarioBO(usuarioDAO);
+        ICategoriaDAO categoriaDAO = new CategoriaDAO();
+        categoriaBO = new CategoriaBO(categoriaDAO);
+        IUnidadMedidaDAO unidadMedidaDAO = new UnidadMedidaDAO();
+        unidadMedidaBO = new UnidadMedidaBO(unidadMedidaDAO);
 
         // Crear usuario de prueba
         DTOEntradaUsuario dtoUsuario = new DTOEntradaUsuario();

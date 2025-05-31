@@ -4,13 +4,14 @@
  */
 package BOs;
 
-import DAO.ProductoDAO;
 import DTOEntrada.DTOEntradaProducto;
 import DTOSalida.DTOSalidaProducto;
 import Excepcion.NegocioException;
 import Mappers.ProductoMapper;
 import POJOs.Producto;
 import Excepcion.PersistenciaException;
+import Interfaces.IProductoBO;
+import Interfaces.IProductoDAO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +21,13 @@ import java.util.List;
  *
  * @author SDavidLedesma
  */
-public class ProductoBO {
+public class ProductoBO implements IProductoBO {
 
-    private final ProductoDAO productoDAO = new ProductoDAO();
+    private final IProductoDAO productoDAO;
+
+    public ProductoBO(IProductoDAO productoDAO) {
+        this.productoDAO = productoDAO;
+    }
 
     /**
      * Registra un nuevo producto.
@@ -30,10 +35,12 @@ public class ProductoBO {
      * @param dto DTOEntradaProducto con datos a registrar
      * @throws NegocioException Si ocurre un error de negocio/persistencia
      */
-    public void registrarProducto(DTOEntradaProducto dto) throws NegocioException {
+    @Override
+    public DTOSalidaProducto registrarProducto(DTOEntradaProducto dto) throws NegocioException {
         try {
             Producto producto = ProductoMapper.toEntityFromEntrada(dto);
             productoDAO.insertar(producto);
+            return ProductoMapper.toDTOSalida(producto);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al registrar producto: " + ex.getMessage(), ex);
         }
@@ -45,6 +52,7 @@ public class ProductoBO {
      * @return Lista de DTOSalidaProducto
      * @throws NegocioException Si ocurre un error en la consulta
      */
+    @Override
     public List<DTOSalidaProducto> consultarTodos() throws NegocioException {
         try {
             List<DTOSalidaProducto> lista = new ArrayList<>();
@@ -64,6 +72,7 @@ public class ProductoBO {
      * @return DTOSalidaProducto si lo encuentra, null si no existe
      * @throws NegocioException Si ocurre un error en la búsqueda
      */
+    @Override
     public DTOSalidaProducto buscarPorId(String idProducto) throws NegocioException {
         try {
             Producto p = productoDAO.buscarPorId(idProducto);
@@ -85,7 +94,8 @@ public class ProductoBO {
      * (DTOEntradaProducto)
      * @throws NegocioException Si ocurre un error al actualizar
      */
-    public void actualizarProducto(String idProducto, DTOEntradaProducto dto) throws NegocioException {
+    @Override
+    public DTOSalidaProducto actualizarProducto(String idProducto, DTOEntradaProducto dto) throws NegocioException {
         try {
             Producto producto = productoDAO.buscarPorId(idProducto);
             if (producto == null) {
@@ -101,6 +111,7 @@ public class ProductoBO {
             producto.setIdUnidadMedida(new org.bson.types.ObjectId(dto.getIdUnidadMedida()));
             producto.setImagen(dto.getImagen());
             productoDAO.actualizar(producto);
+            return ProductoMapper.toDTOSalida(producto);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al actualizar producto: " + ex.getMessage(), ex);
         }
@@ -112,6 +123,7 @@ public class ProductoBO {
      * @param idProducto ID a eliminar
      * @throws NegocioException Si ocurre un error al eliminar
      */
+    @Override
     public void eliminarProducto(String idProducto) throws NegocioException {
         try {
             productoDAO.eliminar(idProducto);

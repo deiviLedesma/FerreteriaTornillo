@@ -4,11 +4,15 @@
  */
 package BOs;
 
+import DAO.CajaDAO;
+import DAO.UsuarioDAO;
 import DTOEntrada.DTOEntradaCaja;
 import DTOEntrada.DTOEntradaUsuario;
 import DTOSalida.DTOSalidaCaja;
 import DTOSalida.DTOSalidaUsuario;
 import Excepcion.NegocioException;
+import Interfaces.ICajaDAO;
+import Interfaces.IUsuarioDAO;
 import java.util.Date;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
@@ -32,8 +36,10 @@ class CajaBOTest {
 
     @BeforeAll
     static void setUp() throws NegocioException {
-        cajaBO = new CajaBO();
-        usuarioBO = new UsuarioBO();
+        ICajaDAO cajaDAO = new CajaDAO();
+        cajaBO = new CajaBO(cajaDAO);
+        IUsuarioDAO usuarioDAO = new UsuarioDAO();
+        usuarioBO = new UsuarioBO(usuarioDAO);
 
         // 1. Crear usuario (no retorna nada)
         DTOEntradaUsuario dtoUsuario = new DTOEntradaUsuario();

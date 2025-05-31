@@ -4,9 +4,11 @@
  */
 package BOs;
 
+import DAO.ProveedorDAO;
 import DTOEntrada.DTOEntradaProveedor;
 import DTOSalida.DTOSalidaProveedor;
 import Excepcion.NegocioException;
+import Interfaces.IProveedorDAO;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,7 +29,8 @@ public class ProveedorBOTest {
 
     @BeforeAll
     static void setUp() {
-        proveedorBO = new ProveedorBO();
+        IProveedorDAO proveedorDAO = new ProveedorDAO();
+        proveedorBO = new ProveedorBO(proveedorDAO);
     }
 
     @Test

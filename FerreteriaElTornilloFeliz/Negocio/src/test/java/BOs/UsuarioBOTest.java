@@ -4,9 +4,11 @@
  */
 package BOs;
 
+import DAO.UsuarioDAO;
 import DTOEntrada.DTOEntradaUsuario;
 import DTOSalida.DTOSalidaUsuario;
 import Excepcion.NegocioException;
+import Interfaces.IUsuarioDAO;
 import Utilidades.EncriptadorUtil;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,7 +30,8 @@ public class UsuarioBOTest {
 
     @BeforeAll
     static void setUp() {
-        usuarioBO = new UsuarioBO();
+        IUsuarioDAO usuarioDAO = new UsuarioDAO();
+        usuarioBO = new UsuarioBO(usuarioDAO);
     }
 
     @Test

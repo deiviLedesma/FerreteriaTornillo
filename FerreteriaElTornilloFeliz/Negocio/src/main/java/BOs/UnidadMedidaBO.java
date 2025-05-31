@@ -11,6 +11,8 @@ import Excepcion.NegocioException;
 import Mappers.UnidadMedidaMapper;
 import POJOs.UnidadMedida;
 import Excepcion.PersistenciaException;
+import Interfaces.IUnidadMedidaBO;
+import Interfaces.IUnidadMedidaDAO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,19 +22,26 @@ import java.util.List;
  *
  * @author SDavidLedesma
  */
-public class UnidadMedidaBO {
+public class UnidadMedidaBO implements IUnidadMedidaBO {
 
-    private final UnidadMedidaDAO unidadMedidaDAO = new UnidadMedidaDAO();
+    private final IUnidadMedidaDAO unidadMedidaDAO;
 
-    public void registrarUnidadMedida(DTOEntradaUnidadMedida dto) throws NegocioException {
+    public UnidadMedidaBO(IUnidadMedidaDAO unidadMedidaDAO) {
+        this.unidadMedidaDAO = unidadMedidaDAO;
+    }
+
+    @Override
+    public DTOSalidaUnidadMedida registrarUnidadMedida(DTOEntradaUnidadMedida dto) throws NegocioException {
         try {
             UnidadMedida unidad = UnidadMedidaMapper.toEntityFromEntrada(dto);
             unidadMedidaDAO.insertar(unidad);
+            return UnidadMedidaMapper.toDTOSalida(unidad);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al registrar unidad de medida: " + ex.getMessage(), ex);
         }
     }
 
+    @Override
     public List<DTOSalidaUnidadMedida> consultarTodas() throws NegocioException {
         try {
             List<DTOSalidaUnidadMedida> lista = new ArrayList<>();
@@ -45,6 +54,7 @@ public class UnidadMedidaBO {
         }
     }
 
+    @Override
     public DTOSalidaUnidadMedida buscarPorId(String idUnidadMedida) throws NegocioException {
         try {
             UnidadMedida u = unidadMedidaDAO.buscarPorId(idUnidadMedida);
@@ -57,15 +67,18 @@ public class UnidadMedidaBO {
         }
     }
 
-    public void actualizarUnidadMedida(DTOSalidaUnidadMedida dto) throws NegocioException {
+    @Override
+    public DTOSalidaUnidadMedida actualizarUnidadMedida(DTOSalidaUnidadMedida dto) throws NegocioException {
         try {
             UnidadMedida unidad = UnidadMedidaMapper.toEntityFromSalida(dto);
             unidadMedidaDAO.actualizar(unidad);
+            return UnidadMedidaMapper.toDTOSalida(unidad);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al actualizar unidad de medida: " + ex.getMessage(), ex);
         }
     }
 
+    @Override
     public void eliminarUnidadMedida(String idUnidadMedida) throws NegocioException {
         try {
             unidadMedidaDAO.eliminar(idUnidadMedida);

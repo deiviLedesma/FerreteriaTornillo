@@ -4,9 +4,11 @@
  */
 package BOs;
 
+import DAO.CategoriaDAO;
 import DTOEntrada.DTOEntradaCategoria;
 import DTOSalida.DTOSalidaCategoria;
 import Excepcion.NegocioException;
+import Interfaces.ICategoriaDAO;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,7 +29,8 @@ public class CategoriaBOTest {
 
     @BeforeAll
     static void setUp() {
-        categoriaBO = new CategoriaBO();
+        ICategoriaDAO categoriaDAO = new CategoriaDAO();
+        categoriaBO = new CategoriaBO(categoriaDAO);
     }
 
     @Test

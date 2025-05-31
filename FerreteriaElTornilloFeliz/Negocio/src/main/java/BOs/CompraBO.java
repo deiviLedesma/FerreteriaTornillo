@@ -4,8 +4,6 @@
  */
 package BOs;
 
-import DAO.CompraDAO;
-import DAO.ProductoDAO;
 import DTOEntrada.DTOEntradaCompra;
 import DTOSalida.DTOSalidaCompra;
 import Excepcion.NegocioException;
@@ -13,6 +11,9 @@ import Mappers.CompraMapper;
 import POJOs.Compra;
 import POJOs.Producto;
 import Excepcion.PersistenciaException;
+import Interfaces.ICompraBO;
+import Interfaces.ICompraDAO;
+import Interfaces.IProductoDAO;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,16 +24,22 @@ import java.util.List;
  *
  * @author SDavidLedesma
  */
-public class CompraBO {
+public class CompraBO implements ICompraBO {
 
-    private final CompraDAO compraDAO = new CompraDAO();
-    private final ProductoDAO productoDAO = new ProductoDAO();
+    private final ICompraDAO compraDAO;
+    private final IProductoDAO productoDAO;
+
+    public CompraBO(ICompraDAO compraDAO, IProductoDAO productoDAO ) {
+        this.compraDAO = compraDAO;
+        this.productoDAO = productoDAO;
+    }
 
     /**
      * Registra una nueva compra. Valida existencia de productos y suma
      * existencias.
      */
-    public void registrarCompra(DTOEntradaCompra dto) throws NegocioException {
+    @Override
+    public DTOSalidaCompra registrarCompra(DTOEntradaCompra dto) throws NegocioException {
         try {
             for (var detalle : dto.getDetalles()) {
                 Producto producto = productoDAO.buscarPorId(detalle.getIdProducto());
@@ -46,6 +53,7 @@ public class CompraBO {
             for (var detalle : dto.getDetalles()) {
                 productoDAO.aumentarStock(detalle.getIdProducto(), detalle.getCantidad());
             }
+            return CompraMapper.toDTOSalida(compra);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al registrar compra: " + ex.getMessage(), ex);
         }
@@ -54,6 +62,7 @@ public class CompraBO {
     /**
      * Consulta todas las compras.
      */
+    @Override
     public List<DTOSalidaCompra> buscarTodas() throws NegocioException {
         try {
             List<DTOSalidaCompra> lista = new ArrayList<>();
@@ -69,6 +78,7 @@ public class CompraBO {
     /**
      * Consulta una compra por id.
      */
+    @Override
     public DTOSalidaCompra buscarPorId(String idCompra) throws NegocioException {
         try {
             Compra c = compraDAO.buscarPorId(idCompra);
@@ -84,6 +94,7 @@ public class CompraBO {
     /**
      * Devuelve una lista de compras realizadas a un proveedor entre dos fechas.
      */
+    @Override
     public List<DTOSalidaCompra> reporteComprasPorRangoYProveedor(Date inicio, Date fin, String idProveedor) throws NegocioException {
         try {
             var compras = compraDAO.reporteComprasPorFechasYProveedor(inicio, fin, idProveedor);

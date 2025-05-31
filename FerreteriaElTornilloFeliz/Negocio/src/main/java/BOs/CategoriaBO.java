@@ -11,6 +11,8 @@ import Excepcion.NegocioException;
 import Mappers.CategoriaMapper;
 import POJOs.Categoria;
 import Excepcion.PersistenciaException;
+import Interfaces.ICategoriaBO;
+import Interfaces.ICategoriaDAO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,19 +22,26 @@ import java.util.List;
  *
  * @author SDavidLedesma
  */
-public class CategoriaBO {
+public class CategoriaBO implements ICategoriaBO {
 
-    private final CategoriaDAO categoriaDAO = new CategoriaDAO();
+    private final ICategoriaDAO categoriaDAO;
 
-    public void registrarCategoria(DTOEntradaCategoria dto) throws NegocioException {
+    public CategoriaBO(ICategoriaDAO categoriaDAO) {
+        this.categoriaDAO = categoriaDAO;
+    }
+
+    @Override
+    public DTOSalidaCategoria registrarCategoria(DTOEntradaCategoria dto) throws NegocioException {
         try {
             Categoria categoria = CategoriaMapper.toEntityFromEntrada(dto);
             categoriaDAO.insertar(categoria);
+            return CategoriaMapper.toDTOSalida(categoria);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al registrar categoría: " + ex.getMessage(), ex);
         }
     }
 
+    @Override
     public List<DTOSalidaCategoria> consultarTodas() throws NegocioException {
         try {
             List<DTOSalidaCategoria> lista = new ArrayList<>();
@@ -45,6 +54,7 @@ public class CategoriaBO {
         }
     }
 
+    @Override
     public DTOSalidaCategoria buscarPorId(String idCategoria) throws NegocioException {
         try {
             Categoria c = categoriaDAO.buscarPorId(idCategoria);
@@ -57,15 +67,19 @@ public class CategoriaBO {
         }
     }
 
-    public void actualizarCategoria(DTOSalidaCategoria dto) throws NegocioException {
+    @Override
+    public DTOSalidaCategoria actualizarCategoria(DTOSalidaCategoria dto) throws NegocioException {
         try {
             Categoria categoria = CategoriaMapper.toEntityFromSalida(dto);
             categoriaDAO.actualizar(categoria);
+            // categoria.setId(new ObjectId()); cehcar si se asginan las actualizaciones de los  bo
+            return CategoriaMapper.toDTOSalida(categoria);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al actualizar categoría: " + ex.getMessage(), ex);
         }
     }
 
+    @Override
     public void eliminarCategoria(String idCategoria) throws NegocioException {
         try {
             categoriaDAO.eliminar(idCategoria);

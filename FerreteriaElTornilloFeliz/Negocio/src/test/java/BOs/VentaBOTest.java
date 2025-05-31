@@ -4,6 +4,12 @@
  */
 package BOs;
 
+import DAO.CajaDAO;
+import DAO.CategoriaDAO;
+import DAO.ProductoDAO;
+import DAO.UnidadMedidaDAO;
+import DAO.UsuarioDAO;
+import DAO.VentaDAO;
 import DTOEntrada.DTOEntradaCaja;
 import DTOEntrada.DTOEntradaCategoria;
 import DTOEntrada.DTOEntradaDetalleVenta;
@@ -14,6 +20,12 @@ import DTOEntrada.DTOEntradaVenta;
 import DTOSalida.DTOSalidaCaja;
 import DTOSalida.DTOSalidaVenta;
 import Excepcion.NegocioException;
+import Interfaces.ICajaDAO;
+import Interfaces.ICategoriaDAO;
+import Interfaces.IProductoDAO;
+import Interfaces.IUnidadMedidaDAO;
+import Interfaces.IUsuarioDAO;
+import Interfaces.IVentaDAO;
 import Utilidades.EncriptadorUtil;
 import java.util.Date;
 import java.util.List;
@@ -42,10 +54,14 @@ public class VentaBOTest {
 
     @BeforeAll
     static void setUp() throws NegocioException {
-        ventaBO = new VentaBO();
-        productoBO = new ProductoBO();
-        cajaBO = new CajaBO();
-        usuarioBO = new UsuarioBO();
+        IProductoDAO productoDAO = new ProductoDAO();
+        productoBO = new ProductoBO(productoDAO);
+        ICajaDAO cajaDAO = new CajaDAO();
+        cajaBO = new CajaBO(cajaDAO);
+        IUsuarioDAO usuarioDAO = new UsuarioDAO();
+        usuarioBO = new UsuarioBO(usuarioDAO);
+        IVentaDAO ventaDAO = new VentaDAO();
+        ventaBO = new VentaBO(ventaDAO, cajaDAO, productoDAO);
 
         // Crear usuario de prueba
         DTOEntradaUsuario dtoUsuario = new DTOEntradaUsuario();
@@ -58,8 +74,10 @@ public class VentaBOTest {
                 .findFirst().orElseThrow().getIdUsaurio();
 
         // Crear producto de prueba (requiere categoría y unidad)
-        CategoriaBO categoriaBO = new CategoriaBO();
-        UnidadMedidaBO unidadBO = new UnidadMedidaBO();
+        ICategoriaDAO categoriaDAO = new CategoriaDAO();
+        CategoriaBO categoriaBO = new CategoriaBO(categoriaDAO);
+        IUnidadMedidaDAO unidadMedidaDAO = new UnidadMedidaDAO();
+        UnidadMedidaBO unidadBO = new UnidadMedidaBO(unidadMedidaDAO);
         DTOEntradaCategoria catDto = new DTOEntradaCategoria();
         catDto.setNombre("CatVentaTest");
         categoriaBO.registrarCategoria(catDto);
@@ -157,14 +175,13 @@ public class VentaBOTest {
     }
 
     /**
-    @Test
-    @Order(4)
-    void testReporteVentasPorRangoFechasYUsuario() throws NegocioException {
-        Date inicio = new Date(System.currentTimeMillis() - 1000L * 60 * 60 * 24);
-        Date fin = new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24);
-        List<DTOSalidaVenta> reporte = ventaBO.buscarPorRangoFechasYUsuario(inicio, fin, idUsuario);
-        assertNotNull(reporte);
-        assertFalse(reporte.isEmpty(), "El reporte no debe estar vacío");
-    }
-    **/
+     * @Test @Order(4) void testReporteVentasPorRangoFechasYUsuario() throws
+     * NegocioException { Date inicio = new Date(System.currentTimeMillis() -
+     * 1000L * 60 * 60 * 24); Date fin = new Date(System.currentTimeMillis() +
+     * 1000L * 60 * 60 * 24); List<DTOSalidaVenta> reporte =
+     * ventaBO.buscarPorRangoFechasYUsuario(inicio, fin, idUsuario);
+     * assertNotNull(reporte); assertFalse(reporte.isEmpty(), "El reporte no
+     * debe estar vacío"); }
+     *
+     */
 }

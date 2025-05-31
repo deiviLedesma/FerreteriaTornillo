@@ -4,9 +4,6 @@
  */
 package BOs;
 
-import DAO.VentaDAO;
-import DAO.CajaDAO;
-import DAO.ProductoDAO;
 import DTOEntrada.DTOEntradaVenta;
 import DTOSalida.DTOSalidaVenta;
 import Excepcion.NegocioException;
@@ -14,6 +11,10 @@ import Mappers.VentaMapper;
 import POJOs.Venta;
 import POJOs.Producto;
 import Excepcion.PersistenciaException;
+import Interfaces.ICajaDAO;
+import Interfaces.IProductoDAO;
+import Interfaces.IVentaBO;
+import Interfaces.IVentaDAO;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,17 +26,24 @@ import java.util.List;
  *
  * @author SDavidLedesma
  */
-public class VentaBO {
+public class VentaBO implements IVentaBO {
 
-    private final VentaDAO ventaDAO = new VentaDAO();
-    private final CajaDAO cajaDAO = new CajaDAO();
-    private final ProductoDAO productoDAO = new ProductoDAO();
+    private final IVentaDAO ventaDAO;
+    private final ICajaDAO cajaDAO;
+    private final IProductoDAO productoDAO;
+
+    public VentaBO(IVentaDAO ventaDAO, ICajaDAO cajaDAO, IProductoDAO productoDAO) {
+        this.ventaDAO = ventaDAO;
+        this.cajaDAO = cajaDAO;
+        this.productoDAO = productoDAO;
+    }
 
     /**
      * Registra una nueva venta. Valida caja activa y stock suficiente para cada
      * producto. Descuenta el stock al final.
      */
-    public void registrarVenta(DTOEntradaVenta dto) throws NegocioException {
+    @Override
+    public DTOSalidaVenta registrarVenta(DTOEntradaVenta dto) throws NegocioException {
         try {
             // Validar caja activa (por usuario)
             if (dto.getIdCaja() == null || dto.getIdCaja().isEmpty()) {
@@ -62,6 +70,7 @@ public class VentaBO {
             for (var detalle : dto.getDetalles()) {
                 productoDAO.descontarStock(detalle.getIdProducto(), detalle.getCantidad());
             }
+            return VentaMapper.toDTOSalida(venta);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al registrar venta: " + ex.getMessage(), ex);
         }
@@ -70,6 +79,7 @@ public class VentaBO {
     /**
      * Consulta todas las ventas.
      */
+    @Override
     public List<DTOSalidaVenta> buscarTodas() throws NegocioException {
         try {
             List<DTOSalidaVenta> lista = new ArrayList<>();
@@ -85,6 +95,7 @@ public class VentaBO {
     /**
      * Consulta una venta por id.
      */
+    @Override
     public DTOSalidaVenta buscarPorId(String idVenta) throws NegocioException {
         try {
             Venta v = ventaDAO.buscarPorId(idVenta);
@@ -100,6 +111,7 @@ public class VentaBO {
     /**
      * Consulta ventas por rango de fechas y usuario (para reportes).
      */
+    @Override
     public List<DTOSalidaVenta> buscarPorRangoFechasYUsuario(Date inicio, Date fin, String idUsuario) throws NegocioException {
         try {
             List<DTOSalidaVenta> lista = new ArrayList<>();

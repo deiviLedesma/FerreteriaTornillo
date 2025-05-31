@@ -4,11 +4,17 @@
  */
 package BOs;
 
+import DAO.CategoriaDAO;
+import DAO.ProductoDAO;
+import DAO.UnidadMedidaDAO;
 import DTOEntrada.DTOEntradaCategoria;
 import DTOEntrada.DTOEntradaProducto;
 import DTOEntrada.DTOEntradaUnidadMedida;
 import DTOSalida.DTOSalidaProducto;
 import Excepcion.NegocioException;
+import Interfaces.ICategoriaDAO;
+import Interfaces.IProductoDAO;
+import Interfaces.IUnidadMedidaDAO;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -31,11 +37,14 @@ public class ProductoBOTest {
 
     @BeforeAll
     static void setUp() throws NegocioException {
-        productoBO = new ProductoBO();
+        IProductoDAO productoDAO = new ProductoDAO();
+        productoBO = new ProductoBO(productoDAO);
 
         // Aseguramos tener al menos una categoría y unidad
-        CategoriaBO categoriaBO = new CategoriaBO();
-        UnidadMedidaBO unidadBO = new UnidadMedidaBO();
+        ICategoriaDAO categoriaDAO = new CategoriaDAO();
+        CategoriaBO categoriaBO = new CategoriaBO(categoriaDAO);
+        IUnidadMedidaDAO unidadMedidaDAO = new UnidadMedidaDAO();
+        UnidadMedidaBO unidadBO = new UnidadMedidaBO(unidadMedidaDAO);
 
         DTOEntradaCategoria catDto = new DTOEntradaCategoria();
         catDto.setNombre("CategoriaProductoTest");

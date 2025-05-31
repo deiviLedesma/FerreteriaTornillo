@@ -13,6 +13,9 @@ import Mappers.DevolucionMapper;
 import POJOs.Devolucion;
 import POJOs.Producto;
 import Excepcion.PersistenciaException;
+import Interfaces.IDevolucionBO;
+import Interfaces.IDevolucionDAO;
+import Interfaces.IProductoDAO;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,16 +26,22 @@ import java.util.List;
  *
  * @author SDavidLedesma
  */
-public class DevolucionBO {
+public class DevolucionBO implements IDevolucionBO {
 
-    private final DevolucionDAO devolucionDAO = new DevolucionDAO();
-    private final ProductoDAO productoDAO = new ProductoDAO();
+    private final IDevolucionDAO devolucionDAO;
+    private final IProductoDAO productoDAO;
+
+    public DevolucionBO(IDevolucionDAO devolucionDAO, IProductoDAO productoDAO) {
+        this.devolucionDAO = devolucionDAO;
+        this.productoDAO = productoDAO;
+    }
 
     /**
      * Registra una devolución. Si la devolución es de producto y la decisión es
      * reintegrar, suma existencias.
      */
-    public void registrarDevolucion(DTOEntradaDevolucion dto) throws NegocioException {
+    @Override
+    public DTOSalidaDevolucion registrarDevolucion(DTOEntradaDevolucion dto) throws NegocioException {
         try {
             // Solo reintegra stock si aplica
             if ("PRODUCTO".equalsIgnoreCase(dto.getTipo()) && "REINTEGRAR".equalsIgnoreCase(dto.getDecision())) {
@@ -42,9 +51,9 @@ public class DevolucionBO {
                 }
                 productoDAO.aumentarStock(dto.getIdProducto(), dto.getCantidad());
             }
-            // Aquí puedes agregar lógica para devoluciones de venta completa si requieres
             Devolucion devolucion = DevolucionMapper.toEntityFromEntrada(dto);
             devolucionDAO.insertar(devolucion);
+            return DevolucionMapper.toDTOSalida(devolucion);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al registrar devolución: " + ex.getMessage(), ex);
         }
@@ -53,6 +62,7 @@ public class DevolucionBO {
     /**
      * Consulta todas las devoluciones.
      */
+    @Override
     public List<DTOSalidaDevolucion> buscarTodas() throws NegocioException {
         try {
             List<DTOSalidaDevolucion> lista = new ArrayList<>();
@@ -68,6 +78,7 @@ public class DevolucionBO {
     /**
      * Consulta una devolución por id.
      */
+    @Override
     public DTOSalidaDevolucion buscarPorId(String idDevolucion) throws NegocioException {
         try {
             Devolucion d = devolucionDAO.buscarPorId(idDevolucion);
@@ -83,6 +94,7 @@ public class DevolucionBO {
     /**
      * Reporte de devoluciones por rango de fechas.
      */
+    @Override
     public List<DTOSalidaDevolucion> reporteDevolucionesPorRangoFechas(Date inicio, Date fin) throws NegocioException {
         try {
             List<Devolucion> lista = devolucionDAO.buscarPorRangoFechas(inicio, fin);
@@ -99,6 +111,7 @@ public class DevolucionBO {
     /**
      * Reporte de devoluciones por usuario.
      */
+    @Override
     public List<DTOSalidaDevolucion> reporteDevolucionesPorUsuario(String usuario) throws NegocioException {
         try {
             List<Devolucion> lista = devolucionDAO.buscarPorUsuario(usuario);

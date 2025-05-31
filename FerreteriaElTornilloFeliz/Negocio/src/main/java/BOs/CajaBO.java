@@ -11,8 +11,10 @@ import DTOSalida.DTOSalidaCaja;
 import Excepcion.NegocioException;
 import Mappers.CajaMapper;
 import POJOs.Caja;
-import POJOs.Venta;
 import Excepcion.PersistenciaException;
+import Interfaces.ICajaBO;
+import Interfaces.ICajaDAO;
+import Interfaces.IVentaDAO;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,14 +25,19 @@ import java.util.List;
  *
  * @author SDavidLedesma
  */
-public class CajaBO {
+public class CajaBO implements ICajaBO {
 
-    private final CajaDAO cajaDAO = new CajaDAO();
-    private final VentaDAO ventaDAO = new VentaDAO();
+    private final ICajaDAO cajaDAO;
+    private final IVentaDAO ventaDAO = new VentaDAO();
+
+    public CajaBO(ICajaDAO cajaDAO) {
+        this.cajaDAO = cajaDAO;
+    }
 
     /**
      * Abre una nueva caja. Lanza NegocioException si ya hay una activa.
      */
+    @Override
     public DTOSalidaCaja abrirCaja(DTOEntradaCaja dto) throws NegocioException {
         try {
             Caja cajaActiva = cajaDAO.buscarCajaActiva();
@@ -48,6 +55,7 @@ public class CajaBO {
     /**
      * Cierra la caja y devuelve su DTO de salida actualizado.
      */
+    @Override
     public DTOSalidaCaja cerrarCaja(String idCaja, double montoFinal) throws NegocioException {
         try {
             // Busca la caja
@@ -73,6 +81,7 @@ public class CajaBO {
     /**
      * Busca una caja por su id.
      */
+    @Override
     public DTOSalidaCaja buscarPorId(String idCaja) throws NegocioException {
         try {
             Caja caja = cajaDAO.buscarPorId(idCaja);
@@ -88,6 +97,7 @@ public class CajaBO {
     /**
      * Consulta todas las cajas registradas.
      */
+    @Override
     public List<DTOSalidaCaja> buscarTodos() throws NegocioException {
         try {
             List<DTOSalidaCaja> lista = new ArrayList<>();
@@ -103,6 +113,7 @@ public class CajaBO {
     /**
      * Consulta cajas por rango de fechas de apertura.
      */
+    @Override
     public List<DTOSalidaCaja> buscarPorRangoFechas(Date inicio, Date fin) throws NegocioException {
         try {
             List<DTOSalidaCaja> lista = new ArrayList<>();
@@ -118,6 +129,7 @@ public class CajaBO {
     /**
      * Busca la caja activa (no cerrada).
      */
+    @Override
     public DTOSalidaCaja buscarCajaActiva() throws NegocioException {
         try {
             Caja caja = cajaDAO.buscarCajaActiva();
@@ -133,6 +145,7 @@ public class CajaBO {
     /**
      * Devuelve una lista de cajas abiertas entre dos fechas.
      */
+    @Override
     public List<DTOSalidaCaja> reporteCajasPorRangoFechas(Date inicio, Date fin) throws NegocioException {
         try {
             var cajas = cajaDAO.buscarPorRangoFechas(inicio, fin);

@@ -97,4 +97,9 @@ public interface IProductoDAO {
      * @throws PersistenciaException Si ocurre un error durante la consulta.
      */
     List<Producto> productosBajoStock(int limite) throws PersistenciaException;
+
+    void descontarStock(String idProducto, int cantidad) throws PersistenciaException;
+
+    void aumentarStock(String idProducto, int cantidad) throws PersistenciaException;
+
 }

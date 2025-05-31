@@ -4,9 +4,11 @@
  */
 package BOs;
 
+import DAO.UnidadMedidaDAO;
 import DTOEntrada.DTOEntradaUnidadMedida;
 import DTOSalida.DTOSalidaUnidadMedida;
 import Excepcion.NegocioException;
+import Interfaces.IUnidadMedidaDAO;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,7 +29,8 @@ public class UnidadMedidaBOTest {
 
     @BeforeAll
     static void setUp() {
-        unidadMedidaBO = new UnidadMedidaBO();
+        IUnidadMedidaDAO unidadMedidaDAO = new UnidadMedidaDAO();
+        unidadMedidaBO = new UnidadMedidaBO(unidadMedidaDAO);
     }
 
     @Test

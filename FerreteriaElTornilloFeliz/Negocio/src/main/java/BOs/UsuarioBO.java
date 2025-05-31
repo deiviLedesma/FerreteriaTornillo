@@ -11,6 +11,8 @@ import Excepcion.NegocioException;
 import Mappers.UsuarioMapper;
 import POJOs.Usuario;
 import Excepcion.PersistenciaException;
+import Interfaces.IUsuarioBO;
+import Interfaces.IUsuarioDAO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,19 +22,26 @@ import java.util.List;
  *
  * @author SDavidLedesma
  */
-public class UsuarioBO {
+public class UsuarioBO implements IUsuarioBO {
 
-    private final UsuarioDAO usuarioDAO = new UsuarioDAO();
+    private final IUsuarioDAO usuarioDAO;
 
-    public void registrarUsuario(DTOEntradaUsuario dto) throws NegocioException {
+    public UsuarioBO(IUsuarioDAO usuarioDAO) {
+        this.usuarioDAO = usuarioDAO;
+    }
+
+    @Override
+    public DTOSalidaUsuario registrarUsuario(DTOEntradaUsuario dto) throws NegocioException {
         try {
             Usuario usuario = UsuarioMapper.toEntityFromEntrada(dto);
             usuarioDAO.insertar(usuario);
+            return UsuarioMapper.toDTOSalida(usuario);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al registrar usuario: " + ex.getMessage(), ex);
         }
     }
 
+    @Override
     public List<DTOSalidaUsuario> consultarTodos() throws NegocioException {
         try {
             List<DTOSalidaUsuario> lista = new ArrayList<>();
@@ -45,6 +54,7 @@ public class UsuarioBO {
         }
     }
 
+    @Override
     public DTOSalidaUsuario buscarPorId(String idUsuario) throws NegocioException {
         try {
             Usuario u = usuarioDAO.buscarPorId(idUsuario);
@@ -57,15 +67,17 @@ public class UsuarioBO {
         }
     }
 
-    public void actualizarUsuario(DTOSalidaUsuario dto) throws NegocioException {
+    public DTOSalidaUsuario actualizarUsuario(DTOSalidaUsuario dto) throws NegocioException {
         try {
             Usuario usuario = UsuarioMapper.toEntityFromSalida(dto);
             usuarioDAO.actualizar(usuario);
+            return UsuarioMapper.toDTOSalida(usuario);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al actualizar usuario: " + ex.getMessage(), ex);
         }
     }
 
+    @Override
     public void eliminarUsuario(String idUsuario) throws NegocioException {
         try {
             usuarioDAO.eliminar(idUsuario);
@@ -83,6 +95,7 @@ public class UsuarioBO {
      * @throws NegocioException Si las credenciales son incorrectas o hay error
      * de persistencia
      */
+    @Override
     public DTOSalidaUsuario validarCredenciales(String nombreUsuario, String contrasena) throws NegocioException {
         try {
             Usuario usuario = usuarioDAO.validarCredenciales(nombreUsuario, contrasena);
