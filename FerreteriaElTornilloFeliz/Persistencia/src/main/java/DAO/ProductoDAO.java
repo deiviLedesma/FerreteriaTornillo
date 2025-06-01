@@ -44,7 +44,6 @@ public class ProductoDAO implements IProductoDAO {
         try {
             InsertOneResult resultado = coleccion.insertOne(producto);
             if (resultado.getInsertedId() != null) {
-                producto.setId(resultado.getInsertedId().asObjectId().getValue());
                 return producto;
             } else {
                 throw new PersistenciaException("No se pudo insertar el producto.");

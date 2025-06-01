@@ -12,33 +12,31 @@ import org.bson.types.ObjectId;
 /**
  * Mapper para convertir entre DTOEntradaCaja, DTOSalidaCaja y Caja (POJO).
  * Convierte correctamente los ObjectId y los campos necesarios.
- * 
+ *
  * @author SDavidLedesma
  */
 public class CajaMapper {
 
     /**
      * Convierte de DTOEntradaCaja a Caja (POJO).
+     *
      * @param dto
-     * @return 
+     * @return
      */
     public static Caja toEntityFromEntrada(DTOEntradaCaja dto) {
         Caja caja = new Caja();
         caja.setFechaHoraApertura(dto.getFechaHoraApertura());
         caja.setMontoInicial(dto.getMontoInicial());
 
-        // Solo idUsuarioApertura desde DTOEntradaCaja
-        if (dto.getIdUsuario() != null && !dto.getIdUsuario().isEmpty()) {
-            caja.setIdUsuarioApertura(new ObjectId(dto.getIdUsuario()));
-        }
-
+        caja.setUsuarioApertura(null);//se establece desde dao
         return caja;
     }
 
     /**
      * Convierte de Caja (POJO) a DTOSalidaCaja.
+     *
      * @param caja
-     * @return 
+     * @return
      */
     public static DTOSalidaCaja toDTOSalida(Caja caja) {
         DTOSalidaCaja dto = new DTOSalidaCaja();
@@ -50,19 +48,14 @@ public class CajaMapper {
         dto.setTotalVentas(caja.getTotalVentas());
         dto.setObservaciones(caja.getObservaciones());
 
-        // IDs y nombres de usuarios
-        dto.setIdUsuarioApertura(caja.getIdUsuarioApertura() != null ? caja.getIdUsuarioApertura().toHexString() : null);
-        dto.setUsuarioApertura(caja.getUsuarioApertura());
-        dto.setIdUsuarioCierre(caja.getIdUsuarioCierre() != null ? caja.getIdUsuarioCierre().toHexString() : null);
-        dto.setUsuarioCierre(caja.getUsuarioCierre());
-
         return dto;
     }
 
     /**
      * Convierte de DTOSalidaCaja a Caja (POJO).
+     *
      * @param dto
-     * @return 
+     * @return
      */
     public static Caja toEntityFromSalida(DTOSalidaCaja dto) {
         Caja caja = new Caja();
@@ -79,15 +72,8 @@ public class CajaMapper {
         caja.setTotalVentas(dto.getTotalVentas());
         caja.setObservaciones(dto.getObservaciones());
 
-        // IDs y nombres de usuarios
-        if (dto.getIdUsuarioApertura() != null && !dto.getIdUsuarioApertura().isEmpty()) {
-            caja.setIdUsuarioApertura(new ObjectId(dto.getIdUsuarioApertura()));
-        }
         caja.setUsuarioApertura(dto.getUsuarioApertura());
 
-        if (dto.getIdUsuarioCierre() != null && !dto.getIdUsuarioCierre().isEmpty()) {
-            caja.setIdUsuarioCierre(new ObjectId(dto.getIdUsuarioCierre()));
-        }
         caja.setUsuarioCierre(dto.getUsuarioCierre());
 
         return caja;

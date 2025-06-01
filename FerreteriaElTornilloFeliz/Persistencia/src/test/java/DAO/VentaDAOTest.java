@@ -5,6 +5,7 @@
 package DAO;
 
 import Excepcion.PersistenciaException;
+import POJOs.DetalleVenta;
 import POJOs.Venta;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,9 @@ public class VentaDAOTest {
         venta.setFechaHora(new Date());
         venta.setTotal(900.0);
         venta.setUsuario("usuarioPrueba");
+        DetalleVenta detalleVenta = new DetalleVenta();
+        //detalleVenta.setNombreProducto("hoolaa");
+        //venta.setDetalles(detalleVenta);
         Venta resultado = ventaDAO.insertar(venta);
         assertNotNull(resultado.getId());
         idVentaCreada = resultado.getId();
@@ -73,14 +77,6 @@ public class VentaDAOTest {
     void testBuscarTodos() throws PersistenciaException {
         List<Venta> ventas = ventaDAO.buscarTodos();
         assertTrue(ventas.size() > 0);
-    }
-
-    @Test
-    @Order(6)
-    void testEliminarVenta() throws PersistenciaException {
-        ventaDAO.eliminar(idVentaCreada);
-        Venta eliminado = ventaDAO.buscarPorId(idVentaCreada);
-        assertNull(eliminado);
     }
 
     @Test

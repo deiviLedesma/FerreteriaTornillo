@@ -45,7 +45,7 @@ public class CajaDAO implements ICajaDAO {
             } else {
                 throw new PersistenciaException("No se pudo abrir la caja.");
             }
-        } catch (Exception e) {
+        } catch (PersistenciaException e) {
             throw new PersistenciaException("Error al abrir caja: " + e.getMessage(), e);
         }
     }

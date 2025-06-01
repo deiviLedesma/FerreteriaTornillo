@@ -76,7 +76,7 @@ public class Controlador {
     private PantallaRegistrarVenta pantallaRegistrarVenta;
     private PantallaReportes pantallaReportes;
     private PantallarRegistarProducto pantallarRegistarProducto;
-    private PantallaCaja pantallaCaja;
+    private PantallaAbrirCaja pantallaCaja;
     private PantallaIniciarUsuario pantallaIniciarUsuario;
 
     //manejadores BO
@@ -113,7 +113,7 @@ public class Controlador {
 
         //inicializar pantallas
         menuPrincipal = new MenuPrincipal(this);
-        pantallaCaja = new PantallaCaja(this);
+        pantallaCaja = new PantallaAbrirCaja(this);
         pantallaDevoluciones = new PantallaDevoluciones(this);
         pantallaIniciarUsuario = new PantallaIniciarUsuario(this);
         pantallaProveedores = new PantallaProveedores(this);

@@ -41,12 +41,11 @@ public class VentaDAO implements IVentaDAO {
         try {
             InsertOneResult resultado = coleccion.insertOne(venta);
             if (resultado.getInsertedId() != null) {
-                venta.setId(resultado.getInsertedId().asObjectId().getValue());
                 return venta;
             } else {
                 throw new PersistenciaException("No se pudo insertar la venta.");
             }
-        } catch (Exception e) {
+        } catch (PersistenciaException e) {
             throw new PersistenciaException("Error al insertar venta: " + e.getMessage(), e);
         }
     }

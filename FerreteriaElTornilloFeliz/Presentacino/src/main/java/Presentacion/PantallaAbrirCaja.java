@@ -10,10 +10,13 @@ package Presentacion;
  */
 public class PantallaAbrirCaja extends javax.swing.JPanel {
 
+    
+    Controlador app;
     /**
      * Creates new form PantallaAbrirCaja
      */
-    public PantallaAbrirCaja() {
+    public PantallaAbrirCaja(Controlador app) {
+        this.app = app;
         initComponents();
     }
 
@@ -26,19 +29,106 @@ public class PantallaAbrirCaja extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        lblAbrirCaja = new javax.swing.JLabel();
+        lblCerrarCaja = new javax.swing.JLabel();
+        lblAtras = new javax.swing.JLabel();
+
+        setBackground(new java.awt.Color(255, 102, 0));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/caja-registradora.png"))); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
+        jLabel2.setText("Inicio/Fin del dia");
+
+        lblAbrirCaja.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
+        lblAbrirCaja.setText("Abrir Caja");
+        lblAbrirCaja.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblAbrirCajaMouseClicked(evt);
+            }
+        });
+
+        lblCerrarCaja.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
+        lblCerrarCaja.setText("Cerrar Caja");
+        lblCerrarCaja.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblCerrarCajaMouseClicked(evt);
+            }
+        });
+
+        lblAtras.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        lblAtras.setText("Atrás");
+        lblAtras.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblAtrasMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(144, 144, 144)
+                .addComponent(lblAbrirCaja)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblCerrarCaja)
+                .addGap(123, 123, 123))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(328, 328, 328))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(221, 221, 221)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(lblAtras)))
+                .addContainerGap(170, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(lblAtras)
+                .addGap(45, 45, 45)
+                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(178, 178, 178)
+                        .addComponent(lblAbrirCaja)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
+                        .addComponent(lblCerrarCaja)
+                        .addGap(125, 125, 125))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void lblCerrarCajaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCerrarCajaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblCerrarCajaMouseClicked
+
+    private void lblAbrirCajaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAbrirCajaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblAbrirCajaMouseClicked
+
+    private void lblAtrasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAtrasMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblAtrasMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel lblAbrirCaja;
+    private javax.swing.JLabel lblAtras;
+    private javax.swing.JLabel lblCerrarCaja;
     // End of variables declaration//GEN-END:variables
 }

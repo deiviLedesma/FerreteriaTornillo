@@ -58,6 +58,8 @@ public class Venta implements Serializable {
     public ObjectId getId() {
         return id;
     }
+    
+    
 
     public void setId(ObjectId id) {
         this.id = id;
